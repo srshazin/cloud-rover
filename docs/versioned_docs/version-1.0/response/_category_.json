@@ -1,0 +1,8 @@
+{
+  "label": "Response",
+  "position": 2,
+  "link": {
+    "type": "generated-index",
+    "description": "Guide on making http response using rover"
+  }
+}
