@@ -4,7 +4,12 @@ export function Router(routes: Route[]): Route[] {
     return routes
 }
 
-export function findDynamicRoute(inputRoute: string, dynamicRoutes: Route[]) {
+interface DynamicRouteData {
+    route: Route,
+    pathParams: object
+}
+
+export function findDynamicRoute(inputRoute: string, dynamicRoutes: Route[]): DynamicRouteData | null {
     for (const dynamicRoute of dynamicRoutes) {
         // Convert dynamic route to a regex pattern and capture dynamic values
         const regexPattern = dynamicRoute.path
@@ -24,10 +29,26 @@ export function findDynamicRoute(inputRoute: string, dynamicRoutes: Route[]) {
                 return obj;
             }, {});
 
-            return result; // Return the mapping object
+            return {
+                route: dynamicRoute,
+                pathParams: result
+            }; // Return the mapping object
         }
     }
     return null; // No match found
 }
 
 
+export function getQueryParams(url: string): Record<string, string> {
+    const params: Record<string, string> = {};
+
+    // Create a URL object
+    const urlObj = new URL(url);
+
+    // Iterate through URLSearchParams and populate the params object
+    urlObj.searchParams.forEach((value, key) => {
+        params[key] = value;
+    });
+
+    return params;
+}
