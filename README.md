@@ -17,7 +17,7 @@
 
 ## Installation
 
-Install the library using npm or yarn:
+Install the library using npm.
 
 ```bash
 npm install cloud-rover
