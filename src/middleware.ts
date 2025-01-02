@@ -24,6 +24,10 @@ export async function Rover(request: Request, router: Route[]): Promise<Response
         }
     }
 
+    const params: RouteParams = {
+        pathParams: pathParams,
+        queryParams: getQueryParams(request.url)
+    }
 
     if (route) {
         // check if method is defined in the router
@@ -39,13 +43,16 @@ export async function Rover(request: Request, router: Route[]): Promise<Response
         }
 
         // requested path is matched with at least one from the router
-        const params: RouteParams = {
-            pathParams: pathParams,
-            queryParams: getQueryParams(request.url)
-        }
+
         return route.handler(request, params)
     }
     else {
-        return new Response("404 Not Found")
+
+        // check if a custom route for 404 is defined. 
+        const custom404Route = router.filter(r => r.path == "*" || r.path == "/*")[0]
+        if (custom404Route) {
+            return custom404Route.handler(request, params)
+        }
+        return reply.error("404 Not Found", 404)
     }
 }

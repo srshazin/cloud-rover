@@ -1,3 +1,4 @@
+import Link from "@docusaurus/Link";
 import "./hero.css";
 
 const Hero = () => {
@@ -8,17 +9,18 @@ const Hero = () => {
       <div className="hero-content">
         <div className="hero-title">Cloud Rover</div>
         <div className="hero-sub-title">
-          We take care of the underlying stuffs, Cloudflare takes care of the
-          scaling while YOU focus on The product
+          Redefining backend possibilities on Cloudflare Workers.
         </div>
         <div className="hero-logo">
           <img src="img/logo.svg" alt="" />
         </div>
 
         <div className="hero-start">
-          <button className="h-btn-start">Get Started</button>
+          <Link to={"/docs/intro"}>
+            <button className="h-btn-start">Get Started</button>
+          </Link>
           <div className="h-start-snippet">
-            <code>npx cloud-rover init</code>
+            <code>$ npm i cloud-rover</code>
           </div>
         </div>
       </div>
