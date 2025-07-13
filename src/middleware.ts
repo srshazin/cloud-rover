@@ -5,7 +5,9 @@ import { containsDynamicRoute } from "./utils";
 
 export async function Rover(
   request: Request,
-  router: Route[]
+  router: Route[],
+  env: Env,
+  ctx: ExecutionContext
 ): Promise<Response> {
   // requested path
   const requestedPath = new URL(request.url).pathname;
@@ -66,14 +68,14 @@ export async function Rover(
 
     // requested path is matched with at least one from the router
 
-    return route.handler(request, params);
+    return route.handler(request, params, env, ctx);
   } else {
     // check if a custom route for 404 is defined.
     const custom404Route = router.filter(
       (r) => r.path == "*" || r.path == "/*"
     )[0];
     if (custom404Route) {
-      return custom404Route.handler(request, params);
+      return custom404Route.handler(request, params, env, ctx);
     }
     return reply.error("404 Not Found", 404);
   }
