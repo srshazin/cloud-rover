@@ -64,7 +64,7 @@ Edit this file **src/index.js**:
 ```js
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return Rover(request, router)
+		return Rover(request, router, env, ctx)
 	},
 } satisfies ExportedHandler<Env>;
 ```
@@ -111,7 +111,7 @@ It should start the development server
 > wrangler dev
 
 
- ⛅️ wrangler 3.99.0
+ ⛅️ wrangler <version code>
 -------------------
 
 ⎔ Starting local server...
