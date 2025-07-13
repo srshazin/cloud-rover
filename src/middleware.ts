@@ -38,11 +38,20 @@ export async function Rover(
       // check if it's a pre-flight OPTIONS request. if so allow all origins and send proper headers so browser can recognize
       if (request.method.toUpperCase() == "OPTIONS") {
         const corsHeader = new Headers({
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Origin": "*", // or a specific origin
+          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PUT",
           "Access-Control-Allow-Headers": "Content-Type, Authorization",
+          "Access-Control-Max-Age": "86400",
         });
-        return reply.text("", 204, corsHeader);
+        return new Response(null, {
+          status: 204,
+          headers: {
+            "Access-Control-Allow-Origin": "*", // or a specific origin
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PUT",
+            "Access-Control-Allow-Headers": "Content-Type, Authorization",
+            "Access-Control-Max-Age": "86400",
+          },
+        });
       }
 
       if (request.method.toLowerCase() != route.method.toLocaleLowerCase()) {
