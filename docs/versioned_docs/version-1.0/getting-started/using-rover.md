@@ -91,7 +91,7 @@ async function index_handler(request): Promise<Response> {
 
 export default {
 	async fetch(request, env, ctx): Promise<Response> {
-		return Rover(request, router)
+		return Rover(request, router, env, ctx)
 	},
 } satisfies ExportedHandler<Env>;
 

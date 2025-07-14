@@ -3,11 +3,11 @@ type HandlerType = {};
 export interface Route {
   path: string;
   // Overloading handler for multiple call signatures
-  handler(request: Request, env: Env): Promise<Response>;
+  handler(request: Request, env: any): Promise<Response>;
   handler(request: Request, params: RouteParams): Promise<Response>;
   handler(request: Request, ctx: ExecutionContext): Promise<Response>;
-  handler(request: Request, env: Env, ctx: ExecutionContext): Promise<Response>;
-  handler(request: Request, params: RouteParams, env: Env): Promise<Response>;
+  handler(request: Request, env: any, ctx: ExecutionContext): Promise<Response>;
+  handler(request: Request, params: RouteParams, env: any): Promise<Response>;
   handler(
     request: Request,
     params: RouteParams,
@@ -16,7 +16,7 @@ export interface Route {
   handler(
     request: Request,
     params: RouteParams,
-    env: Env,
+    env: any,
     ctx: ExecutionContext
   ): Promise<Response>;
   method?: string;
