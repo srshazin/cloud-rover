@@ -1,13 +1,24 @@
 import { reply } from "./response";
 import { findDynamicRoute, getQueryParams } from "./router";
 import { Route, RouteParams } from "./types";
-import { containsDynamicRoute } from "./utils";
+import { containsDynamicRoute, getCorsHeaders } from "./utils";
 
+/**
+ * The Rover middleware
+ * @export
+ * @param {Request} request
+ * @param {Route[]} router
+ * @param {Env} env
+ * @param {ExecutionContext} ctx
+ * @param {(string[]|string)} [allowedOrigins]
+ * @return {*}  {Promise<Response>}
+ */
 export async function Rover(
   request: Request,
   router: Route[],
   env: Env,
-  ctx: ExecutionContext
+  ctx: ExecutionContext,
+  allowedOrigins?: string[] | string
 ): Promise<Response> {
   // requested path
   const requestedPath = new URL(request.url).pathname;
@@ -34,48 +45,63 @@ export async function Rover(
     queryParams: getQueryParams(request.url),
   };
 
+  // get the cors headers
+  const corsHeader = getCorsHeaders(
+    request.headers.get("Origin"),
+    allowedOrigins
+  );
   if (route) {
     // check if method is defined in the router
     if (route.method) {
       // check if it's a pre-flight OPTIONS request. if so allow all origins and send proper headers so browser can recognize
       if (request.method.toUpperCase() == "OPTIONS") {
-        const corsHeader = new Headers({
-          "Access-Control-Allow-Origin": "*", // or a specific origin
-          "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PUT",
-          "Access-Control-Allow-Headers": "Content-Type, Authorization",
-          "Access-Control-Max-Age": "86400",
-        });
         return new Response(null, {
           status: 204,
-          headers: {
-            "Access-Control-Allow-Origin": "*", // or a specific origin
-            "Access-Control-Allow-Methods": "GET, POST, OPTIONS, DELETE, PUT",
-            "Access-Control-Allow-Headers": "Content-Type, Authorization",
-            "Access-Control-Max-Age": "86400",
-          },
+          headers: corsHeader,
         });
       }
 
-      if (request.method.toLowerCase() != route.method.toLocaleLowerCase()) {
-        return reply.error("Method not allowed.", 405);
+      if (request.method.toLowerCase() != route.method.toLowerCase()) {
+        return reply.error("Method not allowed.", 405, corsHeader);
       }
     } else {
       // in that case by default only GET method is allowed
       if (request.method != "GET") {
-        return reply.error("Method not allowed.", 405);
+        return reply.error("Method not allowed.", 405, corsHeader);
       }
     }
 
     // requested path is matched with at least one from the router
-
-    return route.handler(request, params, env, ctx);
+    const response = await route.handler({
+      request: request,
+      params: params,
+      env: env,
+      ctx: ctx,
+    });
+    for (const [key, value] of corsHeader.entries()) {
+      if (!response.headers.has(key)) {
+        response.headers.set(key, value);
+      }
+    }
+    return response;
   } else {
     // check if a custom route for 404 is defined.
     const custom404Route = router.filter(
       (r) => r.path == "*" || r.path == "/*"
     )[0];
     if (custom404Route) {
-      return custom404Route.handler(request, params, env, ctx);
+      const response = await custom404Route.handler({
+        request: request,
+        params: params,
+        env: env,
+        ctx: ctx,
+      });
+      for (const [key, value] of corsHeader.entries()) {
+        if (!response.headers.has(key)) {
+          response.headers.set(key, value);
+        }
+      }
+      return response;
     }
     return reply.error("404 Not Found", 404);
   }
