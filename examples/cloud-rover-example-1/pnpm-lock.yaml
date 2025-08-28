@@ -4,16 +4,13 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-overrides:
-  cloud-rover: link:../../../../../.local/share/pnpm/global/5/node_modules/cloud-rover
-
 importers:
 
   .:
     dependencies:
       cloud-rover:
-        specifier: link:../../../../../.local/share/pnpm/global/5/node_modules/cloud-rover
-        version: link:../../../../../.local/share/pnpm/global/5/node_modules/cloud-rover
+        specifier: ^1.0.12
+        version: 1.0.12
     devDependencies:
       '@cloudflare/vitest-pool-workers':
         specifier: ^0.8.19
@@ -695,6 +692,9 @@ packages:
 
   cjs-module-lexer@1.4.3:
     resolution: {integrity: sha512-9z8TZaGM1pfswYeXrUpzPrkx8UnWYdhJclsiYMm6x/w5+nN+8Tf/LnAgfLGQCm59qAOxU8WwHEq2vNwF6i4j+Q==}
+
+  cloud-rover@1.0.12:
+    resolution: {integrity: sha512-IcJj7h8k3uANy/72lxhcirQc+1a/xztTgeSyDzgQ9GEJ9e+i698zLXRNCaEsoB7aKjPdQNV8NyyUTDH3rcxudw==}
 
   color-convert@2.0.1:
     resolution: {integrity: sha512-RRECPsj7iu/xb5oKYcsFHSppFNnsj/52OVTRKb4zP5onXwVF3zVmmToNcOfGC+CRDpfK/U584fMg38ZHCaElKQ==}
@@ -1479,6 +1479,8 @@ snapshots:
   check-error@2.1.1: {}
 
   cjs-module-lexer@1.4.3: {}
+
+  cloud-rover@1.0.12: {}
 
   color-convert@2.0.1:
     dependencies:

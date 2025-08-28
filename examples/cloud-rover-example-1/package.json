@@ -16,11 +16,6 @@
 		"wrangler": "^4.33.0"
 	},
 	"dependencies": {
-		"cloud-rover": "file:../../../../../.local/share/pnpm/global/5/node_modules/cloud-rover"
-	},
-	"pnpm": {
-		"overrides": {
-			"cloud-rover": "link:../../../../../.local/share/pnpm/global/5/node_modules/cloud-rover"
-		}
+		"cloud-rover": "^1.0.12"
 	}
 }

@@ -1,4 +1,4 @@
-import { Rover } from '../../../dist';
+import { Rover } from 'cloud-rover';
 import { router } from './router';
 
 // Allow only a specific list of front-end clients
