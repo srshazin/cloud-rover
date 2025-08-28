@@ -30,9 +30,9 @@ You can change the default entrypoint by editing `wrangler.tml`. by updating the
 Start by creating a router
 
 ```js
-import { Router, Rover, reply } from "cloud-rover";
+import { createRouter, Rover, reply } from "cloud-rover";
 // Define  a router
-const router = Router([
+const router = createRouter([
   {
     path: "/",
     handler: index_handler,
@@ -51,7 +51,7 @@ Here, `index_handler` is the handler function for that router. More on router wi
 
 By default your entry file or `index.js` will look like this
 
-```ts
+```js
 export default {
   async fetch(request, env, ctx) {
     return new Response("Hello World!");
@@ -74,8 +74,8 @@ Notice here the `router` is the router we created earlier
 So now our `index.js` file will look like this
 
 ```js
-import { reply, Router, Rover } from "cloud-rover"
-const router = Router(
+import { reply, createRouter, Rover } from "cloud-rover"
+const router = createRouter(
 	[
 		{
 			path: "/",
@@ -85,7 +85,7 @@ const router = Router(
 	]
 )
 
-async function index_handler(request): Promise<Response> {
+async function index_handler(rc): Promise<Response> {
 	return reply.text("Hello World from Rover!")
 }
 
@@ -102,7 +102,7 @@ export default {
 Follow cloudflare's standard run command for running the project
 
 ```bash
-npm run start
+npm run dev
 ```
 
 It should start the development server

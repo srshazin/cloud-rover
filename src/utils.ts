@@ -3,6 +3,14 @@ export function containsDynamicRoute(path: string) {
   return dynamicPattern.test(path);
 }
 
+/**
+ *
+ *
+ * @export
+ * @param {(string | null)} origin
+ * @param {(string[] | string)} [allowedOrigins]
+ * @return {*}
+ */
 export function getCorsHeaders(
   origin: string | null,
   allowedOrigins?: string[] | string

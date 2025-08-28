@@ -1,40 +1,40 @@
-import { themes as prismThemes } from 'prism-react-renderer';
-import type { Config } from '@docusaurus/types';
-import type * as Preset from '@docusaurus/preset-classic';
+import type * as Preset from "@docusaurus/preset-classic";
+import type { Config } from "@docusaurus/types";
+import { themes as prismThemes } from "prism-react-renderer";
 
 const config: Config = {
-  title: 'Rover',
-  tagline: 'A blazing fast wrapper around Cloudflare workers',
-  favicon: 'img/favicon.ico',
+  title: "Rover",
+  tagline: "A blazing fast wrapper around Cloudflare workers",
+  favicon: "img/favicon.ico",
 
   // Set the production url of your site here
-  url: 'https://shazin.me',
+  url: "https://shazin.me",
   // Set the /<baseUrl>/ pathname under which your site is served
   // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/rover/',
+  baseUrl: "/rover/",
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'srshazin', // Usually your GitHub org/user name.
-  projectName: 'cloud-rover', // Usually your repo name.
+  organizationName: "srshazin", // Usually your GitHub org/user name.
+  projectName: "cloud-rover", // Usually your repo name.
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: "throw",
+  onBrokenMarkdownLinks: "warn",
 
   // Even if you don't use internationalization, you can use this field to set
   // useful metadata like html lang. For example, if your site is Chinese, you
   // may want to replace "en" with "zh-Hans".
   i18n: {
-    defaultLocale: 'en',
-    locales: ['en'],
+    defaultLocale: "en",
+    locales: ["en"],
   },
 
   presets: [
     [
-      'classic',
+      "classic",
       {
         docs: {
-          sidebarPath: './sidebars.ts',
+          sidebarPath: "./sidebars.ts",
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           // editUrl:
@@ -43,20 +43,20 @@ const config: Config = {
         blog: {
           showReadingTime: true,
           feedOptions: {
-            type: ['rss', 'atom'],
+            type: ["rss", "atom"],
             xslt: true,
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            "https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/",
           // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
+          onInlineTags: "warn",
+          onInlineAuthors: "warn",
+          onUntruncatedBlogPosts: "warn",
         },
         theme: {
-          customCss: './src/css/custom.css',
+          customCss: "./src/css/custom.css",
         },
       } satisfies Preset.Options,
     ],
@@ -67,34 +67,34 @@ const config: Config = {
     colorMode: {
       defaultMode: "dark",
       disableSwitch: true,
-      respectPrefersColorScheme: false
+      respectPrefersColorScheme: false,
     },
     navbar: {
-      title: 'ROVER',
+      title: "ROVER",
       logo: {
-        alt: 'Rover Logo',
-        src: 'img/logo.svg',
+        alt: "Rover Logo",
+        src: "img/logo.svg",
       },
       items: [
         {
-          type: 'docSidebar',
-          sidebarId: 'tutorialSidebar',
-          position: 'left',
-          label: 'Docs',
+          type: "docSidebar",
+          sidebarId: "tutorialSidebar",
+          position: "left",
+          label: "Docs",
         },
         // { to: '/blog', label: 'Blog', position: 'left' },
         {
-          href: 'https://github.com/srshazin/cloud-rover',
-          label: 'GitHub',
-          position: 'right',
+          href: "https://github.com/srshazin/cloud-rover",
+          label: "GitHub",
+          position: "right",
         },
         {
-          type: 'docsVersionDropdown'
-        }
+          type: "docsVersionDropdown",
+        },
       ],
     },
     footer: {
-      style: 'dark',
+      style: "dark",
       // links: [
       //   {
       //     title: 'Docs',
@@ -108,7 +108,6 @@ const config: Config = {
       //   {
       //     title: 'Community',
       //     items: [
-
 
       //       {
       //         label: 'TwitterX',
@@ -138,7 +137,7 @@ const config: Config = {
     },
     prism: {
       theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      darkTheme: prismThemes.synthwave84,
     },
   } satisfies Preset.ThemeConfig,
 };
