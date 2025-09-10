@@ -1,4 +1,5 @@
 import { Route } from "./types";
+import { extractSubRoute } from "./utils";
 
 export const schematicPaths: Route[] = [];
 
@@ -98,12 +99,12 @@ export function cacheSchematicPaths(routes: Route[]): void {
       // check if wildcard character * exists at the end
       // for now we'll process * in end of the path string
       if (route.path.charAt(route.path.length - 1) == "*") {
-        const headSlice = route.path.slice(0, route.path.length - 2);
+        // const headSlice = route.path.slice(0, route.path.length - 2);
 
         // finally push the route to the cache
         // replicate
         schematicPaths.push({
-          path: headSlice,
+          path: route.path,
           handler: route.handler,
           isSchematic: true,
           method: route.method,
@@ -115,9 +116,17 @@ export function cacheSchematicPaths(routes: Route[]): void {
 
 export function matchSchematicPath(path: string): Route | null {
   // loop through the schematic route array and keep checking for match
+
   for (let i = 0; i < schematicPaths.length; i++) {
-    if (path.includes(schematicPaths[i].path)) {
+    console.log("schematicPaths[i]: ", schematicPaths[i].path, " path: ", path);
+
+    if (path.includes(schematicPaths[i].path.replace("*", ""))) {
+      console.log("Inside include");
+
       // match found return the first occurrence.
+      // const subRoute =  extractSubRoute(schematicPaths)
+      console.log("Extracted path: ", schematicPaths[i]);
+
       return schematicPaths[i];
     }
   }

@@ -3,6 +3,7 @@ import {
   cacheSchematicPaths,
   findDynamicRoute,
   getQueryParams,
+  matchSchematicPath,
 } from "./router";
 import { Route, RouteParams } from "./types";
 import { containsDynamicRoute, getCorsHeaders } from "./utils";
@@ -62,7 +63,10 @@ export async function Rover(
    * Final type: Schematic Path
    * Filter out schematic Path
    */
-
+  // check if route is still null
+  if (!route) {
+    const matchedSchematicPath = matchSchematicPath(requestedPath);
+  }
   // get the cors headers
   const corsHeader = getCorsHeaders(
     request.headers.get("Origin"),
