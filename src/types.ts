@@ -29,6 +29,7 @@ export interface Route {
     | "HEAD"
     | "OPTIONS"
     | "CONNECT";
+  isSchematic?: boolean;
 }
 
 export type RouteParams = {

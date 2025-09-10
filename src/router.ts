@@ -1,5 +1,7 @@
 import { Route } from "./types";
 
+export const schematicPaths: Route[] = [];
+
 /**
  * returns an array of route objects which can be passed directly to the middleware for routing
  * @export
@@ -81,3 +83,32 @@ export function getQueryParams(url: string): Record<string, string> {
 
   return params;
 }
+
+export function cacheSchematicPaths(routes: Route[]): void {
+  console.log("Ran schematic path cacher....");
+
+  // loop thorough the routes
+  routes.forEach((route) => {
+    // process only schematic ones
+    if (route.isSchematic) {
+      // check if wildcard character * exists at the end
+      // for now we'll process * in end of the path string
+      if (route.path.charAt(route.path.length - 1) == "*") {
+        const headSlice = route.path.slice(0, route.path.length - 2);
+
+        // finally push the route to the cache
+        // replicate
+        schematicPaths.push({
+          path: headSlice,
+          handler: route.handler,
+          isSchematic: true,
+          method: route.method,
+        });
+      }
+    }
+  });
+}
+
+// export const findSchematicPath() {
+
+// }

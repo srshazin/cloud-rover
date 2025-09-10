@@ -1,5 +1,9 @@
 import { reply } from "./response";
-import { findDynamicRoute, getQueryParams } from "./router";
+import {
+  cacheSchematicPaths,
+  findDynamicRoute,
+  getQueryParams,
+} from "./router";
 import { Route, RouteParams } from "./types";
 import { containsDynamicRoute, getCorsHeaders } from "./utils";
 
@@ -13,6 +17,8 @@ import { containsDynamicRoute, getCorsHeaders } from "./utils";
  * @param {(string[]|string)} [allowedOrigins]
  * @return {*}  {Promise<Response>}
  */
+let initialized = false;
+
 export async function Rover(
   request: Request,
   router: Route[],
@@ -20,11 +26,18 @@ export async function Rover(
   ctx: ExecutionContext,
   allowedOrigins?: string[] | string
 ): Promise<Response> {
+  // create a schematic route cache on first call.
+  function init() {
+    cacheSchematicPaths(router);
+    initialized = true;
+  }
+  if (!initialized) {
+    init();
+  }
   // requested path
   const requestedPath = new URL(request.url).pathname;
   // dynamic path parameter holder
   let pathParams: object | null = null;
-
   // check whether the absolute path exists in the router array
   let route = router.filter((route) => route.path == requestedPath)[0];
 
@@ -44,6 +57,11 @@ export async function Rover(
     pathParams: pathParams,
     queryParams: getQueryParams(request.url),
   };
+
+  /**
+   * Final type: Schematic Path
+   * Filter out schematic Path
+   */
 
   // get the cors headers
   const corsHeader = getCorsHeaders(
