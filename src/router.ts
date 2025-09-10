@@ -84,6 +84,10 @@ export function getQueryParams(url: string): Record<string, string> {
   return params;
 }
 
+/**
+ * function to cache schematic routes on init
+ * @param routes
+ */
 export function cacheSchematicPaths(routes: Route[]): void {
   console.log("Ran schematic path cacher....");
 
@@ -109,6 +113,13 @@ export function cacheSchematicPaths(routes: Route[]): void {
   });
 }
 
-// export const findSchematicPath() {
-
-// }
+export function matchSchematicPath(path: string): Route | null {
+  // loop through the schematic route array and keep checking for match
+  for (let i = 0; i < schematicPaths.length; i++) {
+    if (path.includes(schematicPaths[i].path)) {
+      // match found return the first occurrence.
+      return schematicPaths[i];
+    }
+  }
+  return null;
+}
