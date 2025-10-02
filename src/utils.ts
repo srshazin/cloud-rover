@@ -58,15 +58,15 @@ export function getCorsHeaders(
  * an utility function that extracts the wildcard path from a given schematic path.
  * @param defined - defined path in the router
  * @param incoming - incoming request path
- * @returns  string or null
+ * @returns  string or undefined
  */
 export function extractSubRoute(
   defined: string,
   incoming: string
-): string | null {
+): string | undefined {
   // Ensure wildcard exists
   if (!defined.includes("*")) {
-    return null;
+    return undefined;
   }
 
   // Remove trailing * from defined
@@ -74,7 +74,7 @@ export function extractSubRoute(
 
   // If incoming doesn’t start with base, not a match
   if (!incoming.startsWith(base)) {
-    return null;
+    return undefined;
   }
 
   // Slice off the base part

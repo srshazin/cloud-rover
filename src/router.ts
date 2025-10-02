@@ -1,4 +1,4 @@
-import { Route } from "./types";
+import { Route, SchematicRoute } from "./types";
 import { extractSubRoute } from "./utils";
 
 export const schematicPaths: Route[] = [];
@@ -114,20 +114,26 @@ export function cacheSchematicPaths(routes: Route[]): void {
   });
 }
 
-export function matchSchematicPath(path: string): Route | null {
+export function matchSchematicPath(
+  path: string,
+  schematicRoutes: Route[]
+): SchematicRoute | null {
   // loop through the schematic route array and keep checking for match
-
-  for (let i = 0; i < schematicPaths.length; i++) {
-    console.log("schematicPaths[i]: ", schematicPaths[i].path, " path: ", path);
-
-    if (path.includes(schematicPaths[i].path.replace("*", ""))) {
-      console.log("Inside include");
-
+  for (let i = 0; i < schematicRoutes.length; i++) {
+    if (path.includes(schematicRoutes[i].path.replace("*", ""))) {
       // match found return the first occurrence.
-      // const subRoute =  extractSubRoute(schematicPaths)
-      console.log("Extracted path: ", schematicPaths[i]);
 
-      return schematicPaths[i];
+      /**
+       * Extract the subpath
+       * i.e suppose defined route is /foo/* and incoming is /foo/bar/blah
+       * so extract the /bar/blah part
+       */
+      const subPath = extractSubRoute(schematicRoutes[i].path, path);
+
+      return {
+        route: schematicRoutes[i],
+        subPath: subPath,
+      };
     }
   }
   return null;

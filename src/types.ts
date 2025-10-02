@@ -9,6 +9,7 @@ export interface RC {
   params: RouteParams;
   env: unknown;
   ctx: ExecutionContext;
+  subPath?: string;
 }
 
 /**
@@ -39,5 +40,5 @@ export type RouteParams = {
 
 export interface SchematicRoute {
   route: Route;
-  trailingPath: string;
+  subPath?: string;
 }

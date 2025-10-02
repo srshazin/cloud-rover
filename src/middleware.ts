@@ -1,10 +1,5 @@
 import { reply } from "./response";
-import {
-  cacheSchematicPaths,
-  findDynamicRoute,
-  getQueryParams,
-  matchSchematicPath,
-} from "./router";
+import { findDynamicRoute, getQueryParams, matchSchematicPath } from "./router";
 import { Route, RouteParams } from "./types";
 import { containsDynamicRoute, getCorsHeaders } from "./utils";
 
@@ -18,7 +13,7 @@ import { containsDynamicRoute, getCorsHeaders } from "./utils";
  * @param {(string[]|string)} [allowedOrigins]
  * @return {*}  {Promise<Response>}
  */
-let initialized = false;
+// let initialized = false;
 
 export async function Rover(
   request: Request,
@@ -27,18 +22,15 @@ export async function Rover(
   ctx: ExecutionContext,
   allowedOrigins?: string[] | string
 ): Promise<Response> {
-  // create a schematic route cache on first call.
-  function init() {
-    cacheSchematicPaths(router);
-    initialized = true;
-  }
-  if (!initialized) {
-    init();
-  }
   // requested path
   const requestedPath = new URL(request.url).pathname;
+
   // dynamic path parameter holder
   let pathParams: object | null = null;
+
+  // schematic route's subpath holder
+  let subPath: string | undefined = undefined;
+
   // check whether the absolute path exists in the router array
   let route = router.filter((route) => route.path == requestedPath)[0];
 
@@ -47,10 +39,28 @@ export async function Rover(
     const dynamicRoutes = router.filter((t) => containsDynamicRoute(t.path));
     // now we match the route with available dynamic routes
     const matchedDynamicRoute = findDynamicRoute(requestedPath, dynamicRoutes);
-    console.log("Found dynamic route ", matchedDynamicRoute);
     if (matchedDynamicRoute) {
       route = matchedDynamicRoute.route;
       pathParams = matchedDynamicRoute.pathParams;
+    }
+  }
+
+  // if route is still null find match for a schematic path
+  if (!route) {
+    const schematicRoutes = router.filter((t) => t.isSchematic);
+
+    console.log(schematicRoutes.length);
+    if (schematicRoutes.length > 0) {
+      const matchedSchematicRoute = matchSchematicPath(
+        requestedPath,
+        schematicRoutes
+      );
+      console.log(" i am called");
+
+      if (matchedSchematicRoute) {
+        route = matchedSchematicRoute.route;
+        subPath = matchedSchematicRoute.subPath;
+      }
     }
   }
 
@@ -59,14 +69,6 @@ export async function Rover(
     queryParams: getQueryParams(request.url),
   };
 
-  /**
-   * Final type: Schematic Path
-   * Filter out schematic Path
-   */
-  // check if route is still null
-  if (!route) {
-    const matchedSchematicPath = matchSchematicPath(requestedPath);
-  }
   // get the cors headers
   const corsHeader = getCorsHeaders(
     request.headers.get("Origin"),
@@ -99,6 +101,7 @@ export async function Rover(
       params: params,
       env: env,
       ctx: ctx,
+      subPath: subPath,
     });
     for (const [key, value] of corsHeader.entries()) {
       if (!response.headers.has(key)) {
@@ -111,13 +114,16 @@ export async function Rover(
     const custom404Route = router.filter(
       (r) => r.path == "*" || r.path == "/*"
     )[0];
+
     if (custom404Route) {
       const response = await custom404Route.handler({
         request: request,
         params: params,
+        subPath: subPath,
         env: env,
         ctx: ctx,
       });
+
       for (const [key, value] of corsHeader.entries()) {
         if (!response.headers.has(key)) {
           response.headers.set(key, value);
