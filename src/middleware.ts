@@ -84,11 +84,14 @@ export async function Rover(
           headers: corsHeader,
         });
       }
-
-      if (request.method.toLowerCase() != route.method.toLowerCase()) {
-        return reply.error("Method not allowed.", 405, corsHeader);
+      // check if the method is not an * since routes defined as "*" will allow any method
+      if (route.method != "*") {
+        if (request.method.toLowerCase() != route.method.toLowerCase()) {
+          return reply.error("Method not allowed.", 405, corsHeader);
+        }
       }
     } else {
+      // method is not defined.
       // in that case by default only GET method is allowed
       if (request.method != "GET") {
         return reply.error("Method not allowed.", 405, corsHeader);
@@ -110,6 +113,7 @@ export async function Rover(
     }
     return response;
   } else {
+    // requested didn't match with any defined route
     // check if a custom route for 404 is defined.
     const custom404Route = router.filter(
       (r) => r.path == "*" || r.path == "/*"

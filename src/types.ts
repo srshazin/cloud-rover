@@ -29,7 +29,8 @@ export interface Route {
     | "PATCH"
     | "HEAD"
     | "OPTIONS"
-    | "CONNECT";
+    | "CONNECT"
+    | "*";
   isSchematic?: boolean;
 }
 
