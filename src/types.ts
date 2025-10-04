@@ -39,6 +39,12 @@ export type RouteParams = {
   queryParams: any;
 };
 
+/**
+ *
+ *
+ * @export
+ * @interface SchematicRoute
+ */
 export interface SchematicRoute {
   route: Route;
   subPath?: string;

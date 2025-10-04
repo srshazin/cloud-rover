@@ -1,5 +1,9 @@
 import { reply } from "./response";
-import { findDynamicRoute, getQueryParams, matchSchematicPath } from "./router";
+import {
+  getQueryParams,
+  matchDynamicRoute,
+  matchSchematicRoute,
+} from "./router";
 import { Route, RouteParams } from "./types";
 import { containsDynamicRoute, getCorsHeaders } from "./utils";
 
@@ -13,7 +17,6 @@ import { containsDynamicRoute, getCorsHeaders } from "./utils";
  * @param {(string[]|string)} [allowedOrigins]
  * @return {*}  {Promise<Response>}
  */
-// let initialized = false;
 
 export async function Rover(
   request: Request,
@@ -38,7 +41,7 @@ export async function Rover(
   if (!route) {
     const dynamicRoutes = router.filter((t) => containsDynamicRoute(t.path));
     // now we match the route with available dynamic routes
-    const matchedDynamicRoute = findDynamicRoute(requestedPath, dynamicRoutes);
+    const matchedDynamicRoute = matchDynamicRoute(requestedPath, dynamicRoutes);
     if (matchedDynamicRoute) {
       route = matchedDynamicRoute.route;
       pathParams = matchedDynamicRoute.pathParams;
@@ -51,7 +54,7 @@ export async function Rover(
 
     console.log(schematicRoutes.length);
     if (schematicRoutes.length > 0) {
-      const matchedSchematicRoute = matchSchematicPath(
+      const matchedSchematicRoute = matchSchematicRoute(
         requestedPath,
         schematicRoutes
       );

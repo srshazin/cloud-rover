@@ -1,10 +1,8 @@
 import { Route, SchematicRoute } from "./types";
 import { extractSubRoute } from "./utils";
 
-export const schematicPaths: Route[] = [];
-
 /**
- * returns an array of route objects which can be passed directly to the middleware for routing
+ * Returns an array of route objects which can be passed directly to the middleware for routing
  * @export
  * @param {Route[]} routes
  * @return {*}  {Route[]}
@@ -26,12 +24,12 @@ interface DynamicRouteData {
 /**
  * Checks if the requested route can be parsed as a dynamic route
  * @export
- * @param {string} inputRoute
+ * @param {string} requestedPath
  * @param {Route[]} dynamicRoutes
  * @return {*}  {(DynamicRouteData | null)}
  */
-export function findDynamicRoute(
-  inputRoute: string,
+export function matchDynamicRoute(
+  requestedPath: string,
   dynamicRoutes: Route[]
 ): DynamicRouteData | null {
   for (const dynamicRoute of dynamicRoutes) {
@@ -42,7 +40,7 @@ export function findDynamicRoute(
 
     const regex = new RegExp(`^${regexPattern}$`); // Add start (^) and end ($) anchors
 
-    const match = inputRoute.match(regex);
+    const match = requestedPath.match(regex);
     if (match) {
       // Extract the dynamic keys from the route pattern
       const keys =
@@ -85,42 +83,13 @@ export function getQueryParams(url: string): Record<string, string> {
   return params;
 }
 
-/**
- * function to cache schematic routes on init
- * @param routes
- */
-export function cacheSchematicPaths(routes: Route[]): void {
-  console.log("Ran schematic path cacher....");
-
-  // loop thorough the routes
-  routes.forEach((route) => {
-    // process only schematic ones
-    if (route.isSchematic) {
-      // check if wildcard character * exists at the end
-      // for now we'll process * in end of the path string
-      if (route.path.charAt(route.path.length - 1) == "*") {
-        // const headSlice = route.path.slice(0, route.path.length - 2);
-
-        // finally push the route to the cache
-        // replicate
-        schematicPaths.push({
-          path: route.path,
-          handler: route.handler,
-          isSchematic: true,
-          method: route.method,
-        });
-      }
-    }
-  });
-}
-
-export function matchSchematicPath(
-  path: string,
+export function matchSchematicRoute(
+  requestedPath: string,
   schematicRoutes: Route[]
 ): SchematicRoute | null {
   // loop through the schematic route array and keep checking for match
   for (let i = 0; i < schematicRoutes.length; i++) {
-    if (path.includes(schematicRoutes[i].path.replace("*", ""))) {
+    if (requestedPath.includes(schematicRoutes[i].path.replace("*", ""))) {
       // match found return the first occurrence.
 
       /**
@@ -128,7 +97,7 @@ export function matchSchematicPath(
        * i.e suppose defined route is /foo/* and incoming is /foo/bar/blah
        * so extract the /bar/blah part
        */
-      const subPath = extractSubRoute(schematicRoutes[i].path, path);
+      const subPath = extractSubRoute(schematicRoutes[i].path, requestedPath);
 
       return {
         route: schematicRoutes[i],
