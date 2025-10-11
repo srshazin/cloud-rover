@@ -52,14 +52,11 @@ export async function Rover(
   if (!route) {
     const schematicRoutes = router.filter((t) => t.isSchematic);
 
-    console.log(schematicRoutes.length);
     if (schematicRoutes.length > 0) {
       const matchedSchematicRoute = matchSchematicRoute(
         requestedPath,
         schematicRoutes
       );
-      console.log(" i am called");
-
       if (matchedSchematicRoute) {
         route = matchedSchematicRoute.route;
         subPath = matchedSchematicRoute.subPath;
@@ -82,6 +79,8 @@ export async function Rover(
     if (route.method) {
       // check if it's a pre-flight OPTIONS request. if so allow all origins and send proper headers so browser can recognize
       if (request.method.toUpperCase() == "OPTIONS") {
+        console.log(corsHeader);
+
         return new Response(null, {
           status: 204,
           headers: corsHeader,
@@ -114,6 +113,7 @@ export async function Rover(
         response.headers.set(key, value);
       }
     }
+
     return response;
   } else {
     // requested didn't match with any defined route

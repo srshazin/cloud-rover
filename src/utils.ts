@@ -30,7 +30,7 @@ export function getCorsHeaders(
       );
       headers.set(
         "Access-Control-Allow-Headers",
-        "Content-Type, Authorization"
+        "accept, accept-profile, apikey, authorization, content-type, x-client-info"
       );
       headers.set("Access-Control-Allow-Credentials", "true");
     }
@@ -49,7 +49,10 @@ export function getCorsHeaders(
     "Access-Control-Allow-Methods",
     "GET, POST, OPTIONS, DELETE, PUT"
   );
-  headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  headers.set(
+    "Access-Control-Allow-Headers",
+    "accept, accept-profile, apikey, authorization, content-type, x-client-info"
+  );
   headers.set("Access-Control-Allow-Credentials", "true");
 
   return headers;
