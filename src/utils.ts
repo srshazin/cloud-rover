@@ -13,6 +13,7 @@ export function containsDynamicRoute(path: string) {
  */
 export function getCorsHeaders(
   origin: string | null,
+  requestedHeaders: string | null,
   allowedOrigins?: string[] | string
 ) {
   if (!origin || !allowedOrigins) {
@@ -30,7 +31,7 @@ export function getCorsHeaders(
       );
       headers.set(
         "Access-Control-Allow-Headers",
-        "accept, accept-profile, apikey, authorization, content-type, x-client-info"
+        requestedHeaders ? requestedHeaders : "authorization, content-type"
       );
       headers.set("Access-Control-Allow-Credentials", "true");
     }
@@ -51,7 +52,7 @@ export function getCorsHeaders(
   );
   headers.set(
     "Access-Control-Allow-Headers",
-    "accept, accept-profile, apikey, authorization, content-type, x-client-info"
+    requestedHeaders ? requestedHeaders : "authorization, content-type"
   );
   headers.set("Access-Control-Allow-Credentials", "true");
 

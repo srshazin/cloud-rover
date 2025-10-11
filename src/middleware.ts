@@ -72,6 +72,7 @@ export async function Rover(
   // get the cors headers
   const corsHeader = getCorsHeaders(
     request.headers.get("Origin"),
+    request.headers.get("Access-Control-Request-Headers"),
     allowedOrigins
   );
   if (route) {
@@ -79,8 +80,6 @@ export async function Rover(
     if (route.method) {
       // check if it's a pre-flight OPTIONS request. if so allow all origins and send proper headers so browser can recognize
       if (request.method.toUpperCase() == "OPTIONS") {
-        console.log(corsHeader);
-
         return new Response(null, {
           status: 204,
           headers: corsHeader,
